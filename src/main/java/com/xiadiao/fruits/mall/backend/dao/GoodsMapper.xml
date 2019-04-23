@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xiadiao.fruits.mall.backend.dao.GoodsMapper" >
+  <resultMap id="BaseResultMap" type="com.xiadiao.fruits.mall.backend.model.Goods" >
+    <id column="uuid" property="uuid" jdbcType="VARCHAR" />
+    <result column="productId" property="productid" jdbcType="VARCHAR" />
+    <result column="productName" property="productname" jdbcType="VARCHAR" />
+    <result column="productMsg" property="productmsg" jdbcType="VARCHAR" />
+    <result column="subTitle" property="subtitle" jdbcType="VARCHAR" />
+    <result column="productImageSmall" property="productimagesmall" jdbcType="VARCHAR" />
+    <result column="productImageBig" property="productimagebig" jdbcType="VARCHAR" />
+    <result column="stock" property="stock" jdbcType="BIGINT" />
+    <result column="salePrice" property="saleprice" jdbcType="BIGINT" />
+    <result column="limitNum" property="limitnum" jdbcType="BIGINT" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    uuid, productId, productName, productMsg, subTitle, productImageSmall, productImageBig, 
+    stock, salePrice, limitNum
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.xiadiao.fruits.mall.backend.model.GoodsExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from diao..goods
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from diao..goods
+    where uuid = #{uuid,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from diao..goods
+    where uuid = #{uuid,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.xiadiao.fruits.mall.backend.model.GoodsExample" >
+    delete from diao..goods
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.xiadiao.fruits.mall.backend.model.Goods" >
+    insert into diao..goods (uuid, productId, productName, 
+      productMsg, subTitle, productImageSmall, 
+      productImageBig, stock, salePrice, 
+      limitNum)
+    values (#{uuid,jdbcType=VARCHAR}, #{productid,jdbcType=VARCHAR}, #{productname,jdbcType=VARCHAR}, 
+      #{productmsg,jdbcType=VARCHAR}, #{subtitle,jdbcType=VARCHAR}, #{productimagesmall,jdbcType=VARCHAR}, 
+      #{productimagebig,jdbcType=VARCHAR}, #{stock,jdbcType=BIGINT}, #{saleprice,jdbcType=BIGINT}, 
+      #{limitnum,jdbcType=BIGINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.xiadiao.fruits.mall.backend.model.Goods" >
+    insert into diao..goods
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="uuid != null" >
+        uuid,
+      </if>
+      <if test="productid != null" >
+        productId,
+      </if>
+      <if test="productname != null" >
+        productName,
+      </if>
+      <if test="productmsg != null" >
+        productMsg,
+      </if>
+      <if test="subtitle != null" >
+        subTitle,
+      </if>
+      <if test="productimagesmall != null" >
+        productImageSmall,
+      </if>
+      <if test="productimagebig != null" >
+        productImageBig,
+      </if>
+      <if test="stock != null" >
+        stock,
+      </if>
+      <if test="saleprice != null" >
+        salePrice,
+      </if>
+      <if test="limitnum != null" >
+        limitNum,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="uuid != null" >
+        #{uuid,jdbcType=VARCHAR},
+      </if>
+      <if test="productid != null" >
+        #{productid,jdbcType=VARCHAR},
+      </if>
+      <if test="productname != null" >
+        #{productname,jdbcType=VARCHAR},
+      </if>
+      <if test="productmsg != null" >
+        #{productmsg,jdbcType=VARCHAR},
+      </if>
+      <if test="subtitle != null" >
+        #{subtitle,jdbcType=VARCHAR},
+      </if>
+      <if test="productimagesmall != null" >
+        #{productimagesmall,jdbcType=VARCHAR},
+      </if>
+      <if test="productimagebig != null" >
+        #{productimagebig,jdbcType=VARCHAR},
+      </if>
+      <if test="stock != null" >
+        #{stock,jdbcType=BIGINT},
+      </if>
+      <if test="saleprice != null" >
+        #{saleprice,jdbcType=BIGINT},
+      </if>
+      <if test="limitnum != null" >
+        #{limitnum,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.xiadiao.fruits.mall.backend.model.GoodsExample" resultType="java.lang.Integer" >
+    select count(*) from diao..goods
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update diao..goods
+    <set >
+      <if test="record.uuid != null" >
+        uuid = #{record.uuid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.productid != null" >
+        productId = #{record.productid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.productname != null" >
+        productName = #{record.productname,jdbcType=VARCHAR},
+      </if>
+      <if test="record.productmsg != null" >
+        productMsg = #{record.productmsg,jdbcType=VARCHAR},
+      </if>
+      <if test="record.subtitle != null" >
+        subTitle = #{record.subtitle,jdbcType=VARCHAR},
+      </if>
+      <if test="record.productimagesmall != null" >
+        productImageSmall = #{record.productimagesmall,jdbcType=VARCHAR},
+      </if>
+      <if test="record.productimagebig != null" >
+        productImageBig = #{record.productimagebig,jdbcType=VARCHAR},
+      </if>
+      <if test="record.stock != null" >
+        stock = #{record.stock,jdbcType=BIGINT},
+      </if>
+      <if test="record.saleprice != null" >
+        salePrice = #{record.saleprice,jdbcType=BIGINT},
+      </if>
+      <if test="record.limitnum != null" >
+        limitNum = #{record.limitnum,jdbcType=BIGINT},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update diao..goods
+    set uuid = #{record.uuid,jdbcType=VARCHAR},
+      productId = #{record.productid,jdbcType=VARCHAR},
+      productName = #{record.productname,jdbcType=VARCHAR},
+      productMsg = #{record.productmsg,jdbcType=VARCHAR},
+      subTitle = #{record.subtitle,jdbcType=VARCHAR},
+      productImageSmall = #{record.productimagesmall,jdbcType=VARCHAR},
+      productImageBig = #{record.productimagebig,jdbcType=VARCHAR},
+      stock = #{record.stock,jdbcType=BIGINT},
+      salePrice = #{record.saleprice,jdbcType=BIGINT},
+      limitNum = #{record.limitnum,jdbcType=BIGINT}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xiadiao.fruits.mall.backend.model.Goods" >
+    update diao..goods
+    <set >
+      <if test="productid != null" >
+        productId = #{productid,jdbcType=VARCHAR},
+      </if>
+      <if test="productname != null" >
+        productName = #{productname,jdbcType=VARCHAR},
+      </if>
+      <if test="productmsg != null" >
+        productMsg = #{productmsg,jdbcType=VARCHAR},
+      </if>
+      <if test="subtitle != null" >
+        subTitle = #{subtitle,jdbcType=VARCHAR},
+      </if>
+      <if test="productimagesmall != null" >
+        productImageSmall = #{productimagesmall,jdbcType=VARCHAR},
+      </if>
+      <if test="productimagebig != null" >
+        productImageBig = #{productimagebig,jdbcType=VARCHAR},
+      </if>
+      <if test="stock != null" >
+        stock = #{stock,jdbcType=BIGINT},
+      </if>
+      <if test="saleprice != null" >
+        salePrice = #{saleprice,jdbcType=BIGINT},
+      </if>
+      <if test="limitnum != null" >
+        limitNum = #{limitnum,jdbcType=BIGINT},
+      </if>
+    </set>
+    where uuid = #{uuid,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xiadiao.fruits.mall.backend.model.Goods" >
+    update diao..goods
+    set productId = #{productid,jdbcType=VARCHAR},
+      productName = #{productname,jdbcType=VARCHAR},
+      productMsg = #{productmsg,jdbcType=VARCHAR},
+      subTitle = #{subtitle,jdbcType=VARCHAR},
+      productImageSmall = #{productimagesmall,jdbcType=VARCHAR},
+      productImageBig = #{productimagebig,jdbcType=VARCHAR},
+      stock = #{stock,jdbcType=BIGINT},
+      salePrice = #{saleprice,jdbcType=BIGINT},
+      limitNum = #{limitnum,jdbcType=BIGINT}
+    where uuid = #{uuid,jdbcType=VARCHAR}
+  </update>
+</mapper>
