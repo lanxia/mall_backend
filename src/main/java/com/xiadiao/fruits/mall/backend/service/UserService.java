@@ -23,6 +23,8 @@ public class UserService {
     @Autowired
     private UsersMapper usersMapper;
 
+    private static final String avatar = "http://osc9sqdxe.bkt.clouddn.com/default-user-avatar.png";
+
     public Resp<Users> login(LoginRequest request,
                              HttpServletResponse response) {
         Resp<Users> resp = new Resp<>();
@@ -78,7 +80,7 @@ public class UserService {
         Users user = new Users();
         user.setUuid(UUID.randomUUID().toString());
         user.setUserid(user.getUuid());
-        user.setAvatar("");
+        user.setAvatar(avatar);
         user.setUsername(request.getUserName());
         user.setUserpwd(request.getUserPwd());
         user.setEmail(request.getEmail());

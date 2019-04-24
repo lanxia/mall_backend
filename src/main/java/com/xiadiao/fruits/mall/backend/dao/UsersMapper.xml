@@ -87,7 +87,7 @@
     <include refid="Base_Column_List" />
     ,
     <include refid="Blob_Column_List" />
-    from diao.users
+    from diao..users
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
@@ -101,7 +101,7 @@
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from diao.users
+    from diao..users
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
@@ -114,21 +114,21 @@
     <include refid="Base_Column_List" />
     ,
     <include refid="Blob_Column_List" />
-    from diao.users
+    from diao..users
     where uuid = #{uuid,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
-    delete from diao.users
+    delete from diao..users
     where uuid = #{uuid,jdbcType=VARCHAR}
   </delete>
   <delete id="deleteByExample" parameterType="com.xiadiao.fruits.mall.backend.model.UsersExample" >
-    delete from diao.users
+    delete from diao..users
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
   <insert id="insert" parameterType="com.xiadiao.fruits.mall.backend.model.Users" >
-    insert into diao.users (uuid, userId, avatar, 
+    insert into diao..users (uuid, userId, avatar, 
       userName, userPwd, email, 
       phone, nickName, realName, 
       addressList)
@@ -138,7 +138,7 @@
       #{addresslist,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.xiadiao.fruits.mall.backend.model.Users" >
-    insert into diao.users
+    insert into diao..users
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="uuid != null" >
         uuid,
@@ -205,13 +205,13 @@
     </trim>
   </insert>
   <select id="countByExample" parameterType="com.xiadiao.fruits.mall.backend.model.UsersExample" resultType="java.lang.Integer" >
-    select count(*) from diao.users
+    select count(*) from diao..users
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map" >
-    update diao.users
+    update diao..users
     <set >
       <if test="record.uuid != null" >
         uuid = #{record.uuid,jdbcType=VARCHAR},
@@ -249,7 +249,7 @@
     </if>
   </update>
   <update id="updateByExampleWithBLOBs" parameterType="map" >
-    update diao.users
+    update diao..users
     set uuid = #{record.uuid,jdbcType=VARCHAR},
       userId = #{record.userid,jdbcType=VARCHAR},
       avatar = #{record.avatar,jdbcType=VARCHAR},
@@ -265,7 +265,7 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map" >
-    update diao.users
+    update diao..users
     set uuid = #{record.uuid,jdbcType=VARCHAR},
       userId = #{record.userid,jdbcType=VARCHAR},
       avatar = #{record.avatar,jdbcType=VARCHAR},
@@ -280,7 +280,7 @@
     </if>
   </update>
   <update id="updateByPrimaryKeySelective" parameterType="com.xiadiao.fruits.mall.backend.model.Users" >
-    update diao.users
+    update diao..users
     <set >
       <if test="userid != null" >
         userId = #{userid,jdbcType=VARCHAR},
@@ -313,7 +313,7 @@
     where uuid = #{uuid,jdbcType=VARCHAR}
   </update>
   <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.xiadiao.fruits.mall.backend.model.Users" >
-    update diao.users
+    update diao..users
     set userId = #{userid,jdbcType=VARCHAR},
       avatar = #{avatar,jdbcType=VARCHAR},
       userName = #{username,jdbcType=VARCHAR},
@@ -326,7 +326,7 @@
     where uuid = #{uuid,jdbcType=VARCHAR}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.xiadiao.fruits.mall.backend.model.Users" >
-    update diao.users
+    update diao..users
     set userId = #{userid,jdbcType=VARCHAR},
       avatar = #{avatar,jdbcType=VARCHAR},
       userName = #{username,jdbcType=VARCHAR},
