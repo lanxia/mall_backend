@@ -1,5 +1,6 @@
 package com.xiadiao.fruits.mall.backend.controller;
 
+import com.xiadiao.fruits.mall.backend.model.Goods;
 import com.xiadiao.fruits.mall.backend.module.AddCartRequest;
 import com.xiadiao.fruits.mall.backend.module.Resp;
 import com.xiadiao.fruits.mall.backend.service.GoodsService;
@@ -38,7 +39,7 @@ public class GoodsController {
     }
 
     @RequestMapping(value = "/productDet", method = RequestMethod.GET)
-    public void detail() {
-        return ;
+    public Resp<Goods> detail(@RequestParam("productId") String productId) {
+        return goodsService.detail(productId);
     }
 }

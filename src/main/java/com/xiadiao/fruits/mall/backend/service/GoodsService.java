@@ -108,4 +108,20 @@ public class GoodsService {
         return resp;
     }
 
+    public Resp<Goods> detail(String productId) {
+        GoodsExample query = new GoodsExample();
+        query.createCriteria().andProductidEqualTo(productId);
+
+        List<Goods> goods = goodsMapper.selectByExample(query);
+        Resp<Goods> resp = new Resp<>();
+
+        if (CollectionUtils.isEmpty(goods)) {
+            resp.setStatus(1);
+            resp.setMsg("商品不存在");
+        } else {
+            resp.setData(goods.get(0));
+        }
+
+        return resp;
+    }
 }
