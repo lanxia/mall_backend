@@ -81,7 +81,7 @@
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from diao..goods
+    from diao.goods
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
@@ -92,21 +92,21 @@
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
     <include refid="Base_Column_List" />
-    from diao..goods
+    from diao.goods
     where uuid = #{uuid,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
-    delete from diao..goods
+    delete from diao.goods
     where uuid = #{uuid,jdbcType=VARCHAR}
   </delete>
   <delete id="deleteByExample" parameterType="com.xiadiao.fruits.mall.backend.model.GoodsExample" >
-    delete from diao..goods
+    delete from diao.goods
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
   <insert id="insert" parameterType="com.xiadiao.fruits.mall.backend.model.Goods" >
-    insert into diao..goods (uuid, productId, productName, 
+    insert into diao.goods (uuid, productId, productName, 
       productMsg, subTitle, productImageSmall, 
       productImageBig, stock, salePrice, 
       limitNum)
@@ -116,7 +116,7 @@
       #{limitnum,jdbcType=BIGINT})
   </insert>
   <insert id="insertSelective" parameterType="com.xiadiao.fruits.mall.backend.model.Goods" >
-    insert into diao..goods
+    insert into diao.goods
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="uuid != null" >
         uuid,
@@ -183,13 +183,13 @@
     </trim>
   </insert>
   <select id="countByExample" parameterType="com.xiadiao.fruits.mall.backend.model.GoodsExample" resultType="java.lang.Integer" >
-    select count(*) from diao..goods
+    select count(*) from diao.goods
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map" >
-    update diao..goods
+    update diao.goods
     <set >
       <if test="record.uuid != null" >
         uuid = #{record.uuid,jdbcType=VARCHAR},
@@ -227,7 +227,7 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map" >
-    update diao..goods
+    update diao.goods
     set uuid = #{record.uuid,jdbcType=VARCHAR},
       productId = #{record.productid,jdbcType=VARCHAR},
       productName = #{record.productname,jdbcType=VARCHAR},
@@ -243,7 +243,7 @@
     </if>
   </update>
   <update id="updateByPrimaryKeySelective" parameterType="com.xiadiao.fruits.mall.backend.model.Goods" >
-    update diao..goods
+    update diao.goods
     <set >
       <if test="productid != null" >
         productId = #{productid,jdbcType=VARCHAR},
@@ -276,7 +276,7 @@
     where uuid = #{uuid,jdbcType=VARCHAR}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.xiadiao.fruits.mall.backend.model.Goods" >
-    update diao..goods
+    update diao.goods
     set productId = #{productid,jdbcType=VARCHAR},
       productName = #{productname,jdbcType=VARCHAR},
       productMsg = #{productmsg,jdbcType=VARCHAR},

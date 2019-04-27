@@ -81,7 +81,7 @@
     <include refid="Base_Column_List" />
     ,
     <include refid="Blob_Column_List" />
-    from diao..user_cart_order
+    from diao.user_cart_order
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
@@ -95,7 +95,7 @@
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from diao..user_cart_order
+    from diao.user_cart_order
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
@@ -108,27 +108,27 @@
     <include refid="Base_Column_List" />
     ,
     <include refid="Blob_Column_List" />
-    from diao..user_cart_order
+    from diao.user_cart_order
     where uuid = #{uuid,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
-    delete from diao..user_cart_order
+    delete from diao.user_cart_order
     where uuid = #{uuid,jdbcType=VARCHAR}
   </delete>
   <delete id="deleteByExample" parameterType="com.xiadiao.fruits.mall.backend.model.UserCartOrderExample" >
-    delete from diao..user_cart_order
+    delete from diao.user_cart_order
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
   <insert id="insert" parameterType="com.xiadiao.fruits.mall.backend.model.UserCartOrderWithBLOBs" >
-    insert into diao..user_cart_order (uuid, userId, cartList, 
+    insert into diao.user_cart_order (uuid, userId, cartList, 
       orderList)
     values (#{uuid,jdbcType=VARCHAR}, #{userid,jdbcType=VARCHAR}, #{cartlist,jdbcType=LONGVARCHAR}, 
       #{orderlist,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.xiadiao.fruits.mall.backend.model.UserCartOrderWithBLOBs" >
-    insert into diao..user_cart_order
+    insert into diao.user_cart_order
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="uuid != null" >
         uuid,
@@ -159,13 +159,13 @@
     </trim>
   </insert>
   <select id="countByExample" parameterType="com.xiadiao.fruits.mall.backend.model.UserCartOrderExample" resultType="java.lang.Integer" >
-    select count(*) from diao..user_cart_order
+    select count(*) from diao.user_cart_order
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map" >
-    update diao..user_cart_order
+    update diao.user_cart_order
     <set >
       <if test="record.uuid != null" >
         uuid = #{record.uuid,jdbcType=VARCHAR},
@@ -185,7 +185,7 @@
     </if>
   </update>
   <update id="updateByExampleWithBLOBs" parameterType="map" >
-    update diao..user_cart_order
+    update diao.user_cart_order
     set uuid = #{record.uuid,jdbcType=VARCHAR},
       userId = #{record.userid,jdbcType=VARCHAR},
       cartList = #{record.cartlist,jdbcType=LONGVARCHAR},
@@ -195,7 +195,7 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map" >
-    update diao..user_cart_order
+    update diao.user_cart_order
     set uuid = #{record.uuid,jdbcType=VARCHAR},
       userId = #{record.userid,jdbcType=VARCHAR}
     <if test="_parameter != null" >
@@ -203,7 +203,7 @@
     </if>
   </update>
   <update id="updateByPrimaryKeySelective" parameterType="com.xiadiao.fruits.mall.backend.model.UserCartOrderWithBLOBs" >
-    update diao..user_cart_order
+    update diao.user_cart_order
     <set >
       <if test="userid != null" >
         userId = #{userid,jdbcType=VARCHAR},
@@ -218,14 +218,14 @@
     where uuid = #{uuid,jdbcType=VARCHAR}
   </update>
   <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.xiadiao.fruits.mall.backend.model.UserCartOrderWithBLOBs" >
-    update diao..user_cart_order
+    update diao.user_cart_order
     set userId = #{userid,jdbcType=VARCHAR},
       cartList = #{cartlist,jdbcType=LONGVARCHAR},
       orderList = #{orderlist,jdbcType=LONGVARCHAR}
     where uuid = #{uuid,jdbcType=VARCHAR}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.xiadiao.fruits.mall.backend.model.UserCartOrder" >
-    update diao..user_cart_order
+    update diao.user_cart_order
     set userId = #{userid,jdbcType=VARCHAR}
     where uuid = #{uuid,jdbcType=VARCHAR}
   </update>
