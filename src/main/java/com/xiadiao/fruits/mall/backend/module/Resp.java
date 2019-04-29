@@ -23,7 +23,7 @@ public class Resp<T> {
     /**
      * 响应数据
      */
-    private T data;
+    private T result;
 
     public Resp() {
     }

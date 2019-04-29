@@ -12,8 +12,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
+import sun.misc.REException;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -96,7 +98,7 @@ public class GoodsService {
             userCartOrderMapper.updateByPrimaryKeyWithBLOBs(cartAndGoods);
 
             resp.setMsg("加入成功");
-            resp.setData("suc");
+            resp.setResult("suc");
         } catch (IOException e) {
             resp.setStatus(1);
             resp.setMsg("购物和有误");
@@ -108,20 +110,89 @@ public class GoodsService {
         return resp;
     }
 
-    public Resp<Goods> detail(String productId) {
+    public Resp<Product> detail(String productId) {
         GoodsExample query = new GoodsExample();
         query.createCriteria().andProductidEqualTo(productId);
 
         List<Goods> goods = goodsMapper.selectByExample(query);
-        Resp<Goods> resp = new Resp<>();
+        Resp<Product> resp = new Resp<>();
 
         if (CollectionUtils.isEmpty(goods)) {
             resp.setStatus(1);
             resp.setMsg("商品不存在");
         } else {
-            resp.setData(goods.get(0));
+            Goods good = goods.get(0);
+
+            Product product = new Product();
+            ObjectMapper mapper = new ObjectMapper();
+
+            try {
+                ProductMsg msg = mapper.readValue(good.getProductmsg(), ProductMsg.class);
+                product.setProductMsg(msg);
+
+                List<String> small = mapper.readValue(good.getProductimagesmall(),
+                    new TypeReference<List<String>>() {});
+                product.setProductImageSmall(small);
+            } catch (Exception e) {
+                resp.setStatus(1);
+                resp.setMsg("商品错误");
+
+                return resp;
+            }
+
+            product.setProductId(good.getProductid());
+            product.setProductImageBig(good.getProductimagebig());
+            product.setSalePrice(good.getSaleprice());
+            product.setStock(good.getStock());
+            product.setSub_title(good.getSubtitle());
+            product.setProductName(good.getProductname());
+            product.setLimit_num(good.getLimitnum());
+
+            resp.setResult(product);
         }
 
         return resp;
     }
+
+    public Resp<ProductList> list() {
+        Resp<ProductList> resp = new Resp<>();
+        ProductList productList = new ProductList();
+        List<Product> products = new ArrayList<>();
+        GoodsExample query = new GoodsExample();
+        ObjectMapper mapper = new ObjectMapper();
+
+        List<Goods> goods = goodsMapper.selectByExample(query);
+        if (!CollectionUtils.isEmpty(goods)) {
+            for (Goods good : goods) {
+                Product product = new Product();
+
+                try {
+                    ProductMsg msg = mapper.readValue(good.getProductmsg(), ProductMsg.class);
+                    product.setProductMsg(msg);
+
+                    List<String> small = mapper.readValue(good.getProductimagesmall(),
+                                                            new TypeReference<List<String>>() {});
+                    product.setProductImageSmall(small);
+                } catch (Exception e) {
+                    continue;
+                }
+
+                product.setProductId(good.getProductid());
+                product.setProductImageBig(good.getProductimagebig());
+                product.setSalePrice(good.getSaleprice());
+                product.setStock(good.getStock());
+                product.setSub_title(good.getSubtitle());
+                product.setProductName(good.getProductname());
+                product.setLimit_num(good.getLimitnum());
+
+                products.add(product);
+            }
+        }
+
+        productList.setHome_hot(products);
+        resp.setResult(productList);
+
+        return resp;
+    }
+
 }

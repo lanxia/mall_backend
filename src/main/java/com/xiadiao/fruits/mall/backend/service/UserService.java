@@ -47,7 +47,7 @@ public class UserService {
         cookie.setPath("/");
         response.addCookie(cookie);
 
-        resp.setData(users.get(0));
+        resp.setResult(users.get(0));
 
         return resp;
     }
@@ -116,7 +116,7 @@ public class UserService {
             return resp;
         }
 
-        resp.setData(users.get(0));
+        resp.setResult(users.get(0));
 
         return resp;
     }

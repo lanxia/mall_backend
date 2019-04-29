@@ -1,6 +1,8 @@
 package com.xiadiao.fruits.mall.backend.controller;
 
 import com.xiadiao.fruits.mall.backend.model.Goods;
+import com.xiadiao.fruits.mall.backend.model.Product;
+import com.xiadiao.fruits.mall.backend.model.ProductList;
 import com.xiadiao.fruits.mall.backend.module.AddCartRequest;
 import com.xiadiao.fruits.mall.backend.module.Resp;
 import com.xiadiao.fruits.mall.backend.service.GoodsService;
@@ -18,7 +20,11 @@ public class GoodsController {
     private final String SMARTISAN_URL = "http://www.smartisan.com/product/home";
 
     @RequestMapping(value = "/computer", method = RequestMethod.GET)
-    public void compute() {
+    public void compute(@RequestParam(value = "sort", required = false) String sort,
+                        @RequestParam(value = "page", required = false) Integer page,
+                        @RequestParam(value = "pageSize", required = false) Integer pageSize,
+                        @RequestParam(value = "priceGt", required = false) String priceGt,
+                        @RequestParam(value = "priceLte", required = false) String priceLte) {
         return ;
     }
 
@@ -34,12 +40,12 @@ public class GoodsController {
     }
 
     @RequestMapping(value = "/productHome", method = RequestMethod.GET)
-    public void list() {
-        return ;
+    public Resp<ProductList> list() {
+        return goodsService.list();
     }
 
     @RequestMapping(value = "/productDet", method = RequestMethod.GET)
-    public Resp<Goods> detail(@RequestParam("productId") String productId) {
+    public Resp<Product> detail(@RequestParam("productId") String productId) {
         return goodsService.detail(productId);
     }
 }
