@@ -1,9 +1,9 @@
 package com.xiadiao.fruits.mall.backend.controller;
 
+import com.xiadiao.fruits.mall.backend.model.*;
 import com.xiadiao.fruits.mall.backend.module.LoginRequest;
 import com.xiadiao.fruits.mall.backend.module.RegisterRequest;
 import com.xiadiao.fruits.mall.backend.module.Resp;
-import com.xiadiao.fruits.mall.backend.model.Users;
 import com.xiadiao.fruits.mall.backend.module.UpdateHeadImageRequest;
 import com.xiadiao.fruits.mall.backend.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -54,8 +55,8 @@ public class UserController {
     }
 
     @RequestMapping(value = "/cartList", method = RequestMethod.POST)
-    public void cartList(@CookieValue(value = "userId") String userId) {
-        return ;
+    public Resp<List<CartGoods>> cartList(@CookieValue(value = "userId") String userId) {
+        return userService.listCart(userId);
     }
 
     @RequestMapping(value = "/cartEdit", method = RequestMethod.POST)
@@ -74,8 +75,9 @@ public class UserController {
     }
 
     @RequestMapping(value = "/addressList", method = RequestMethod.POST)
-    public void addressList(@CookieValue(value = "userId") String userId) {
-        return ;
+    public Resp<List<Address>> addressList(@CookieValue(value = "userId") String userId,
+                                           @RequestBody ListAddressRequest request) {
+        return userService.listAddress(userId, request);
     }
 
     @RequestMapping(value = "/addressUpdate", method = RequestMethod.POST)
@@ -84,8 +86,9 @@ public class UserController {
     }
 
     @RequestMapping(value = "/addressAdd", method = RequestMethod.POST)
-    public void addressAdd(@CookieValue(value = "userId") String userId) {
-        return ;
+    public Resp<String> addressAdd(@CookieValue(value = "userId") String userId,
+                           @RequestBody AddAddressRequest request) {
+        return userService.addAddress(userId, request);
     }
 
     @RequestMapping(value = "/addressDel", method = RequestMethod.POST)

@@ -5,5 +5,5 @@ import java.util.List;
 @lombok.Data
 public class ComputerResult {
     private Integer count;
-    private List<Goods> data;
+    private List<Good> data;
 }

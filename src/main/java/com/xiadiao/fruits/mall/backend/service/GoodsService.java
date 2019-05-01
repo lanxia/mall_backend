@@ -209,6 +209,14 @@ public class GoodsService {
             priceLte = 0L;
         }
 
+        if (page == null) {
+            page = 1;
+        }
+
+        if (pageSize == null) {
+            pageSize = 20;
+        }
+
         if (priceGt < priceLte) {
             Long tmp = priceGt;
             priceGt = priceLte;
@@ -216,19 +224,38 @@ public class GoodsService {
         }
 
         GoodsExample query = new GoodsExample();
-        query.createCriteria().andStockBetween(priceLte, priceGt);
+        query.createCriteria().andSalepriceBetween(priceLte, priceGt);
 
         if (!StringUtils.isEmpty(sort)) {
             query.setOrderByClause("`salePrice` " + sort);
         }
 
         Page<Goods> goodsList = PageHelper.startPage(page, pageSize);
+
         goodsMapper.selectByExample(query);
 
         Resp<ComputerResult> resp = new Resp<>();
         ComputerResult result = new ComputerResult();
         result.setCount(goodsList.size());
-        result.setData(goodsList.getResult());
+        List<Good> r = new ArrayList<>();
+        for (Goods goods : goodsList.getResult()) {
+            Good g = new Good();
+
+            g.setLimit_num(goods.getLimitnum());
+            g.setProductId(goods.getProductid());
+            g.setProductImageBig(goods.getProductimagebig());
+            g.setProductImageSmall(goods.getProductimagesmall());
+            g.setProductMsg(goods.getProductmsg());
+            g.setSalePrice(goods.getSaleprice());
+            g.setUuid(goods.getUuid());
+            g.setSub_title(goods.getSubtitle());
+            g.setStock(goods.getStock());
+            g.setProductName(goods.getProductname());
+
+            r.add(g);
+        }
+        result.setData(r);
+        resp.setResult(result);
 
         return resp;
     }

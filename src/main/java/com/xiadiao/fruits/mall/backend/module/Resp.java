@@ -25,29 +25,29 @@ public class Resp<T> {
      */
     private T result;
 
-//    private Integer count = 0;
+    private Integer count;
 
     public Resp() {
     }
 
     public Resp(final int status, final String msg) {
-        this(status, msg, null);
+        this(status, msg, null, 0);
     }
 
     public static <T> Resp<T> get(final int status, final String msg) {
-        return Resp.get(status, msg, null);
+        return Resp.get(status, msg, null, 0);
     }
 
     public static <T> Resp<T> get(final RespEnum respEnum) {
-        return Resp.get(respEnum.getStatus(), respEnum.getMsg(), null);
+        return Resp.get(respEnum.getStatus(), respEnum.getMsg(), null, 0);
     }
 
     public static <T> Resp<T> get(final RespEnum respEnum, final T data) {
-        return Resp.get(respEnum.getStatus(), respEnum.getMsg(), data);
+        return Resp.get(respEnum.getStatus(), respEnum.getMsg(), data, 0);
     }
 
-    public static <T> Resp<T> get(final int status, final String msg, final T data) {
-        return new Resp<>(status, msg, data);
+    public static <T> Resp<T> get(final int status, final String msg, final T data, final Integer count) {
+        return new Resp<>(status, msg, data, count);
     }
 
     public static <T> Resp<T> success() {
