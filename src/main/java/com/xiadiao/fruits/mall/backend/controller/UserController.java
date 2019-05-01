@@ -37,16 +37,16 @@ public class UserController {
         return userService.register(request, response);
     }
 
-    @RequestMapping(value = "/upload", method = RequestMethod.POST)
-    public void upload() {
-        return ;
-    }
+//    @RequestMapping(value = "/upload", method = RequestMethod.POST)
+//    public void upload() {
+//        return ;
+//    }
 
-    @RequestMapping(value = "/updateheadimage", method = RequestMethod.POST)
-    public void updateHeadImage(@CookieValue(value = "userId", required = false) String userId,
-                                @Valid @RequestBody UpdateHeadImageRequest request) {
-        return ;
-    }
+//    @RequestMapping(value = "/updateheadimage", method = RequestMethod.POST)
+//    public void updateHeadImage(@CookieValue(value = "userId", required = false) String userId,
+//                                @Valid @RequestBody UpdateHeadImageRequest request) {
+//        return ;
+//    }
 
     @RequestMapping(value = "/userInfo", method = RequestMethod.POST)
     public Resp<Users> userInfo(@CookieValue(value = "userId", required = false) String userId) {

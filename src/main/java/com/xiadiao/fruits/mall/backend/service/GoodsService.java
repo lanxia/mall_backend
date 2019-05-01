@@ -2,6 +2,8 @@ package com.xiadiao.fruits.mall.backend.service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import com.xiadiao.fruits.mall.backend.dao.GoodsMapper;
 import com.xiadiao.fruits.mall.backend.dao.UserCartOrderMapper;
 import com.xiadiao.fruits.mall.backend.model.*;
@@ -12,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
-import sun.misc.REException;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -194,5 +195,43 @@ public class GoodsService {
 
         return resp;
     }
+
+    public Resp<ComputerResult> computer(String sort,
+                                         Integer page,
+                                         Integer pageSize,
+                                         Long priceGt,
+                                         Long priceLte) {
+        if (priceGt == null) {
+            priceGt = 99999L;
+        }
+
+        if (priceLte == null) {
+            priceLte = 0L;
+        }
+
+        if (priceGt < priceLte) {
+            Long tmp = priceGt;
+            priceGt = priceLte;
+            priceLte = tmp;
+        }
+
+        GoodsExample query = new GoodsExample();
+        query.createCriteria().andStockBetween(priceLte, priceGt);
+
+        if (!StringUtils.isEmpty(sort)) {
+            query.setOrderByClause("`salePrice` " + sort);
+        }
+
+        Page<Goods> goodsList = PageHelper.startPage(page, pageSize);
+        goodsMapper.selectByExample(query);
+
+        Resp<ComputerResult> resp = new Resp<>();
+        ComputerResult result = new ComputerResult();
+        result.setCount(goodsList.size());
+        result.setData(goodsList.getResult());
+
+        return resp;
+    }
+
 
 }

@@ -1,11 +1,12 @@
 package com.xiadiao.fruits.mall.backend.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.xiadiao.fruits.mall.backend.dao.UserCartOrderMapper;
 import com.xiadiao.fruits.mall.backend.dao.UsersMapper;
+import com.xiadiao.fruits.mall.backend.model.*;
 import com.xiadiao.fruits.mall.backend.module.LoginRequest;
 import com.xiadiao.fruits.mall.backend.module.RegisterRequest;
 import com.xiadiao.fruits.mall.backend.module.Resp;
-import com.xiadiao.fruits.mall.backend.model.Users;
-import com.xiadiao.fruits.mall.backend.model.UsersExample;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,7 @@ import org.springframework.util.StringUtils;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -22,6 +24,9 @@ import java.util.UUID;
 public class UserService {
     @Autowired
     private UsersMapper usersMapper;
+
+    @Autowired
+    private UserCartOrderMapper userCartOrderMapper;
 
     private static final String avatar = "http://osc9sqdxe.bkt.clouddn.com/default-user-avatar.png";
 
@@ -89,6 +94,26 @@ public class UserService {
         user.setRealname(request.getRealName());
 
         usersMapper.insert(user);
+
+        UserCartOrderWithBLOBs userCartOrderWithBLOBs = new UserCartOrderWithBLOBs();
+        userCartOrderWithBLOBs.setUserid(user.getUuid());
+        userCartOrderWithBLOBs.setUuid(UUID.randomUUID().toString());
+
+        ObjectMapper mapper = new ObjectMapper();
+        List<CartGoods> cartList = new ArrayList<>();
+        List<OrderItem> orderList = new ArrayList<>();
+
+        try {
+            userCartOrderWithBLOBs.setCartlist(mapper.writeValueAsString(cartList));
+            userCartOrderWithBLOBs.setOrderlist(mapper.writeValueAsString(orderList));
+        } catch (Exception e) {
+            resp.setStatus(1);
+            resp.setMsg("JSON序列化错误");
+
+            return  resp;
+        }
+
+        userCartOrderMapper.insert(userCartOrderWithBLOBs);
 
         resp.setMsg("注册成功");
         return resp;

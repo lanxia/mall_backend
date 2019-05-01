@@ -25,6 +25,8 @@ public class Resp<T> {
      */
     private T result;
 
+//    private Integer count = 0;
+
     public Resp() {
     }
 

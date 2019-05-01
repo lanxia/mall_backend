@@ -1,6 +1,6 @@
 package com.xiadiao.fruits.mall.backend.controller;
 
-import com.xiadiao.fruits.mall.backend.model.Goods;
+import com.xiadiao.fruits.mall.backend.model.ComputerResult;
 import com.xiadiao.fruits.mall.backend.model.Product;
 import com.xiadiao.fruits.mall.backend.model.ProductList;
 import com.xiadiao.fruits.mall.backend.module.AddCartRequest;
@@ -17,20 +17,18 @@ public class GoodsController {
     @Autowired
     private GoodsService goodsService;
 
-    private final String SMARTISAN_URL = "http://www.smartisan.com/product/home";
-
     @RequestMapping(value = "/computer", method = RequestMethod.GET)
-    public void compute(@RequestParam(value = "sort", required = false) String sort,
-                        @RequestParam(value = "page", required = false) Integer page,
-                        @RequestParam(value = "pageSize", required = false) Integer pageSize,
-                        @RequestParam(value = "priceGt", required = false) String priceGt,
-                        @RequestParam(value = "priceLte", required = false) String priceLte) {
-        return ;
+    public Resp<ComputerResult> compute(@RequestParam(value = "sort", required = false) String sort,
+                                        @RequestParam(value = "page", required = false) Integer page,
+                                        @RequestParam(value = "pageSize", required = false) Integer pageSize,
+                                        @RequestParam(value = "priceGt", required = false) Long priceGt,
+                                        @RequestParam(value = "priceLte", required = false) Long priceLte) {
+        return goodsService.computer(sort, page, pageSize, priceGt, priceLte);
     }
 
     @RequestMapping(value = "/addCart", method = RequestMethod.POST)
     public Resp<String> addCart(@CookieValue(value = "userId", required = false) String userId,
-                        AddCartRequest request) {
+                        @RequestBody AddCartRequest request) {
         return goodsService.addCart(userId, request);
     }
 
