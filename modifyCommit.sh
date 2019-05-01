@@ -2,7 +2,7 @@
 rm -rf "$(git rev-parse --git-dir)/refs/original/"
 
 commit="$1"
-date=$(date -r $(expr $(date '+%s') - 259200) +%s)
+date=$(date -r $(expr $(date '+%s') - 172800) +%s)
 git filter-branch --env-filter \
     "if [ \$GIT_COMMIT = '$commit' ]; then
          export GIT_AUTHOR_DATE='$date'
