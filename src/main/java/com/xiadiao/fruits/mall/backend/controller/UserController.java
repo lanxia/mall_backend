@@ -97,17 +97,19 @@ public class UserController {
     }
 
     @RequestMapping(value = "/payMent", method = RequestMethod.POST)
-    public void payment(@CookieValue(value = "userId") String userId) {
-        return ;
+    public Resp<Order> payment(@CookieValue(value = "userId") String userId,
+                        @RequestBody PaymentRequest request) {
+        return userService.payment(userId, request);
     }
 
     @RequestMapping(value = "/orderList", method = RequestMethod.POST)
-    public void orderList(@CookieValue(value = "userId") String userId) {
-        return ;
+    public Resp<List<Order>> orderList(@CookieValue(value = "userId") String userId) {
+        return userService.listOrder(userId);
     }
 
     @RequestMapping(value = "/delOrder", method = RequestMethod.POST)
-    public void orderDel(@CookieValue(value = "userId") String userId) {
-        return ;
+    public Resp<String> orderDel(@CookieValue(value = "userId") String userId,
+                         @RequestBody DelOrderRequest request) {
+        return userService.delOrder(userId, request);
     }
 }

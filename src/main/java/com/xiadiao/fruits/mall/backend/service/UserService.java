@@ -2,6 +2,7 @@ package com.xiadiao.fruits.mall.backend.service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.xiadiao.fruits.mall.backend.dao.GoodsMapper;
 import com.xiadiao.fruits.mall.backend.dao.UserCartOrderMapper;
 import com.xiadiao.fruits.mall.backend.dao.UsersMapper;
 import com.xiadiao.fruits.mall.backend.model.*;
@@ -17,6 +18,7 @@ import org.springframework.util.StringUtils;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -28,6 +30,9 @@ public class UserService {
 
     @Autowired
     private UserCartOrderMapper userCartOrderMapper;
+
+    @Autowired
+    private GoodsMapper goodsMapper;
 
     private static final String avatar = "http://osc9sqdxe.bkt.clouddn.com/default-user-avatar.png";
 
@@ -113,7 +118,7 @@ public class UserService {
         userCartOrderWithBLOBs.setUuid(UUID.randomUUID().toString());
 
         List<CartGoods> cartList = new ArrayList<>();
-        List<OrderItem> orderList = new ArrayList<>();
+        List<Order> orderList = new ArrayList<>();
 
         try {
             userCartOrderWithBLOBs.setCartlist(mapper.writeValueAsString(cartList));
@@ -287,5 +292,182 @@ public class UserService {
         }
 
         return  resp;
+    }
+
+    public Resp<Order> payment(String userId, PaymentRequest request) {
+        Resp<Order> resp = new Resp<>();
+
+        if (StringUtils.isEmpty(userId)) {
+            resp.setStatus(1);
+            resp.setMsg("未登录");
+
+            return resp;
+        }
+
+        if (StringUtils.isEmpty(request.getAddressId())
+            || StringUtils.isEmpty(request.getOrderTotal())) {
+            resp.setStatus(1);
+            resp.setMsg("缺少必须参数");
+
+            return resp;
+        }
+
+        UsersExample query = new UsersExample();
+        query.createCriteria().andUseridEqualTo(userId);
+        List<Users> users = usersMapper.selectByExampleWithBLOBs(query);
+
+        UserCartOrderExample select = new UserCartOrderExample();
+        select.createCriteria().andUseridEqualTo(userId);
+        List<UserCartOrderWithBLOBs> cartOrders =
+            userCartOrderMapper.selectByExampleWithBLOBs(select);
+
+
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            List<Address> addresses = mapper.readValue(users.get(0).getAddresslist(),
+                                        new TypeReference<List<Address>>() {});
+
+            Address userAddress = new Address();
+            for (Address item : addresses) {
+                if (item.getAddressId().equals(request.getAddressId())) {
+                    userAddress = item;
+                    break;
+                }
+            }
+
+            List<CartGoods> goodsList = new ArrayList<>();
+
+            if (!StringUtils.isEmpty(request.getProductId())
+                && !StringUtils.isEmpty(request.getProductNum())) {
+
+                GoodsExample goodsQuery = new GoodsExample();
+                goodsQuery.createCriteria().andProductidEqualTo(request.getProductId());
+                List<Goods> goods = goodsMapper.selectByExample(goodsQuery);
+
+                CartGoods item = new CartGoods();
+                item.setProductImg(goods.get(0).getProductimagebig());
+                item.setProductId(goods.get(0).getProductid());
+                item.setProductName(goods.get(0).getProductname());
+                item.setChecked("1");
+                item.setProductNum(request.getProductNum());
+                item.setProductPrice(goods.get(0).getSaleprice());
+
+                goodsList.add(item);
+            } else {
+                List<CartGoods> carts = mapper.readValue(cartOrders.get(0).getCartlist(),
+                                                new TypeReference<List<CartGoods>>() {});
+
+                for (CartGoods cart : carts) {
+                    if (cart.getChecked().equals("1")) {
+                        goodsList.add(cart);
+                    }
+                }
+            }
+
+            Order order = new Order();
+            order.setOrderId(UUID.randomUUID().toString());
+            order.setAddressInfo(userAddress);
+            order.setOrderTotal(request.getOrderTotal());
+            order.setOrderStatus("1");
+            order.setCreateDate(new Date());
+            order.setGoodsList(mapper.writeValueAsString(goodsList));
+
+            List<Order> orders = mapper.readValue(cartOrders.get(0).getOrderlist(),
+                                    new TypeReference<List<Order>>() {});
+
+            orders.add(order);
+
+            cartOrders.get(0).setCartlist("[]");
+            cartOrders.get(0).setOrderlist(mapper.writeValueAsString(orders));
+
+            userCartOrderMapper.updateByPrimaryKey(cartOrders.get(0));
+
+            resp.setResult(order);
+        } catch (Exception e) {
+            resp.setStatus(1);
+            resp.setMsg(e.getMessage());
+
+            return resp;
+        }
+
+        return resp;
+    }
+
+    public Resp<List<Order>> listOrder(String userId) {
+        Resp<List<Order>> resp = new Resp<>();
+
+        if (StringUtils.isEmpty(userId)) {
+            resp.setStatus(1);
+            resp.setMsg("未登录");
+
+            return resp;
+        }
+
+        UserCartOrderExample select = new UserCartOrderExample();
+        select.createCriteria().andUseridEqualTo(userId);
+        List<UserCartOrderWithBLOBs> cartOrders =
+            userCartOrderMapper.selectByExampleWithBLOBs(select);
+
+        ObjectMapper mapper = new ObjectMapper();
+
+        try {
+            List<Order> orders = mapper.readValue(cartOrders.get(0).getOrderlist(),
+                new TypeReference<List<Order>>() {});
+
+            resp.setResult(orders);
+            resp.setCount(orders.size());
+        } catch (Exception e) {
+            resp.setStatus(1);
+            resp.setMsg(e.getMessage());
+        }
+
+        return resp;
+    }
+
+    public Resp<String> delOrder(String userId, DelOrderRequest request) {
+        Resp<String> resp = new Resp<>();
+
+        if (StringUtils.isEmpty(userId)) {
+            resp.setStatus(1);
+            resp.setMsg("未登录");
+
+            return resp;
+        }
+
+        if (StringUtils.isEmpty(request.getOrderId())) {
+            resp.setStatus(1);
+            resp.setMsg("缺少订单号");
+
+            return resp;
+        }
+
+        UserCartOrderExample select = new UserCartOrderExample();
+        select.createCriteria().andUseridEqualTo(userId);
+        List<UserCartOrderWithBLOBs> cartOrders =
+            userCartOrderMapper.selectByExampleWithBLOBs(select);
+
+        ObjectMapper mapper = new ObjectMapper();
+
+        try {
+            List<Order> orders = mapper.readValue(cartOrders.get(0).getOrderlist(),
+                new TypeReference<List<Order>>() {});
+
+            for (Order order : orders) {
+                if (order.getOrderId().equals(request.getOrderId())) {
+                    orders.remove(order);
+                    break;
+                }
+            }
+
+            cartOrders.get(0).setOrderlist(mapper.writeValueAsString(orders));
+
+            userCartOrderMapper.updateByPrimaryKey(cartOrders.get(0));
+            resp.setResult("suc");
+        } catch (Exception e) {
+            resp.setStatus(1);
+            resp.setMsg(e.getMessage());
+        }
+
+        return resp;
     }
 }
