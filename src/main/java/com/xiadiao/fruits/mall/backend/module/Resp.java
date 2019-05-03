@@ -13,7 +13,7 @@ public class Resp<T> {
     /**
      * 响应状态码
      */
-    private int status = RespEnum.SUCCESS.getStatus();
+    private String status = RespEnum.SUCCESS.getStatus();
 
     /**
      * 响应消息
@@ -30,11 +30,11 @@ public class Resp<T> {
     public Resp() {
     }
 
-    public Resp(final int status, final String msg) {
+    public Resp(final String status, final String msg) {
         this(status, msg, null, 0);
     }
 
-    public static <T> Resp<T> get(final int status, final String msg) {
+    public static <T> Resp<T> get(final String status, final String msg) {
         return Resp.get(status, msg, null, 0);
     }
 
@@ -46,7 +46,7 @@ public class Resp<T> {
         return Resp.get(respEnum.getStatus(), respEnum.getMsg(), data, 0);
     }
 
-    public static <T> Resp<T> get(final int status, final String msg, final T data, final Integer count) {
+    public static <T> Resp<T> get(final String status, final String msg, final T data, final Integer count) {
         return new Resp<>(status, msg, data, count);
     }
 

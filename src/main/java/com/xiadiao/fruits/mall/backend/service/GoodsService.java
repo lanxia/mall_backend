@@ -33,7 +33,7 @@ public class GoodsService {
         Resp<String> resp = new Resp<>();
 
         if (StringUtils.isEmpty(userId)) {
-            resp.setStatus(1);
+            resp.setStatus("1");
             resp.setMsg("用户未登录");
 
             return resp;
@@ -45,7 +45,7 @@ public class GoodsService {
         List<UserCartOrderWithBLOBs> cartAndOrders =
             userCartOrderMapper.selectByExampleWithBLOBs(query);
         if (CollectionUtils.isEmpty(cartAndOrders)) {
-            resp.setStatus(1);
+            resp.setStatus("1");
             resp.setMsg("用户不存在");
 
             return resp;
@@ -78,7 +78,7 @@ public class GoodsService {
 
                 List<Goods> goods = goodsMapper.selectByExample(goodsQuery);
                 if (CollectionUtils.isEmpty(goods)) {
-                    resp.setStatus(1);
+                    resp.setStatus("1");
                     resp.setMsg("商品不存在");
 
                     return resp;
@@ -101,7 +101,7 @@ public class GoodsService {
             resp.setMsg("加入成功");
             resp.setResult("suc");
         } catch (IOException e) {
-            resp.setStatus(1);
+            resp.setStatus("1");
             resp.setMsg("购物和有误");
 
             return resp;
@@ -119,7 +119,7 @@ public class GoodsService {
         Resp<Product> resp = new Resp<>();
 
         if (CollectionUtils.isEmpty(goods)) {
-            resp.setStatus(1);
+            resp.setStatus("1");
             resp.setMsg("商品不存在");
         } else {
             Goods good = goods.get(0);
@@ -135,7 +135,7 @@ public class GoodsService {
                     new TypeReference<List<String>>() {});
                 product.setProductImageSmall(small);
             } catch (Exception e) {
-                resp.setStatus(1);
+                resp.setStatus("1");
                 resp.setMsg("商品错误");
 
                 return resp;

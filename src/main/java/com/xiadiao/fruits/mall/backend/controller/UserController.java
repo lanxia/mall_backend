@@ -60,8 +60,9 @@ public class UserController {
     }
 
     @RequestMapping(value = "/cartEdit", method = RequestMethod.POST)
-    public void cartEdit(@CookieValue(value = "userId") String userId) {
-        return ;
+    public Resp<String> cartEdit(@CookieValue(value = "userId") String userId,
+                                 @RequestBody EditCartRequest request) {
+        return userService.editCart(userId, request);
     }
 
     @RequestMapping(value = "/editCheckAll", method = RequestMethod.POST)
@@ -70,8 +71,9 @@ public class UserController {
     }
 
     @RequestMapping(value = "/cartDel", method = RequestMethod.POST)
-    public void cartDel(@CookieValue(value = "userId") String userId) {
-        return ;
+    public Resp<String> cartDel(@CookieValue(value = "userId") String userId,
+                                @RequestBody DelCartRequest request) {
+        return userService.delCart(userId, request);
     }
 
     @RequestMapping(value = "/addressList", method = RequestMethod.POST)
@@ -81,8 +83,9 @@ public class UserController {
     }
 
     @RequestMapping(value = "/addressUpdate", method = RequestMethod.POST)
-    public void addressUpdate(@CookieValue(value = "userId") String userId) {
-        return ;
+    public Resp<String> addressUpdate(@CookieValue(value = "userId") String userId,
+                                      @RequestBody UpdateAddressRequest request) {
+        return userService.updateAddress(userId, request);
     }
 
     @RequestMapping(value = "/addressAdd", method = RequestMethod.POST)
@@ -92,8 +95,9 @@ public class UserController {
     }
 
     @RequestMapping(value = "/addressDel", method = RequestMethod.POST)
-    public void addressDel(@CookieValue(value = "userId") String userId) {
-        return ;
+    public Resp<String> addressDel(@CookieValue(value = "userId") String userId,
+                           @RequestBody DelAddressRequest request) {
+        return userService.delAddress(userId, request);
     }
 
     @RequestMapping(value = "/payMent", method = RequestMethod.POST)
@@ -103,7 +107,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "/orderList", method = RequestMethod.POST)
-    public Resp<List<Order>> orderList(@CookieValue(value = "userId") String userId) {
+    public Resp<List<OrderGoods>> orderList(@CookieValue(value = "userId") String userId) {
         return userService.listOrder(userId);
     }
 

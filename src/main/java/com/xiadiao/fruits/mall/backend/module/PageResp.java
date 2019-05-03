@@ -12,7 +12,7 @@ public class PageResp<T> {
     /**
      * 响应状态码
      */
-    private int status = RespEnum.SUCCESS.getStatus();;
+    private String status = RespEnum.SUCCESS.getStatus();;
     /**
      * 响应消息
      */

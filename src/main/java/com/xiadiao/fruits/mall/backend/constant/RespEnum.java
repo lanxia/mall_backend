@@ -11,12 +11,12 @@ public enum RespEnum {
     /**
      * 常用状态枚举
      */
-    SUCCESS(0, "操作成功!");
+    SUCCESS("0", "操作成功!");
 
     /**
      * 响应状态码
      */
-    private int status;
+    private String status;
     /**
      * 默认响应消息
      */

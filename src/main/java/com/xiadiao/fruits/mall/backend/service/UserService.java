@@ -17,6 +17,7 @@ import org.springframework.util.StringUtils;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -36,6 +37,9 @@ public class UserService {
 
     private static final String avatar = "http://osc9sqdxe.bkt.clouddn.com/default-user-avatar.png";
 
+    private static final SimpleDateFormat sDateFormat =
+                    new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+
     public Resp<Users> login(LoginRequest request,
                              HttpServletResponse response) {
         Resp<Users> resp = new Resp<>();
@@ -47,7 +51,7 @@ public class UserService {
 
         List<Users> users =  usersMapper.selectByExample(query);
         if (CollectionUtils.isEmpty(users)) {
-            resp.setStatus(1);
+            resp.setStatus("1");
             resp.setMsg("账号或者密码错误");
 
             return resp;
@@ -82,7 +86,7 @@ public class UserService {
 
         List<Users> users =  usersMapper.selectByExample(query);
         if (!CollectionUtils.isEmpty(users)) {
-            resp.setStatus(1);
+            resp.setStatus("1");
             resp.setMsg("账号已存在");
 
             return resp;
@@ -104,7 +108,7 @@ public class UserService {
         try {
             user.setAddresslist(mapper.writeValueAsString(addresses));
         } catch (Exception e) {
-            resp.setStatus(1);
+            resp.setStatus("1");
             resp.setMsg(e.getMessage());
 
             return resp;
@@ -124,7 +128,7 @@ public class UserService {
             userCartOrderWithBLOBs.setCartlist(mapper.writeValueAsString(cartList));
             userCartOrderWithBLOBs.setOrderlist(mapper.writeValueAsString(orderList));
         } catch (Exception e) {
-            resp.setStatus(1);
+            resp.setStatus("1");
             resp.setMsg("JSON序列化错误");
 
             return  resp;
@@ -140,7 +144,7 @@ public class UserService {
         Resp<Users> resp = new Resp<>();
 
         if (StringUtils.isEmpty(userId)) {
-            resp.setStatus(1);
+            resp.setStatus("1");
             resp.setMsg("未登录");
 
             return resp;
@@ -152,7 +156,7 @@ public class UserService {
 
         List<Users> users =  usersMapper.selectByExample(query);
         if (CollectionUtils.isEmpty(users)) {
-            resp.setStatus(1);
+            resp.setStatus("1");
             resp.setMsg("未登录");
 
             return resp;
@@ -170,7 +174,7 @@ public class UserService {
         query.createCriteria().andUseridEqualTo(userId);
         List<Users> users = usersMapper.selectByExampleWithBLOBs(query);
         if (CollectionUtils.isEmpty(users)) {
-            resp.setStatus(1);
+            resp.setStatus("1");
             resp.setMsg("用户不存在");
 
             return resp;
@@ -199,9 +203,9 @@ public class UserService {
 
             user.setAddresslist(mapper.writeValueAsString(addresses));
 
-            usersMapper.updateByPrimaryKey(user);
+            usersMapper.updateByPrimaryKeyWithBLOBs(user);
         } catch (Exception e) {
-            resp.setStatus(1);
+            resp.setStatus("1");
             resp.setMsg(e.getMessage());
 
             return resp;
@@ -220,7 +224,7 @@ public class UserService {
 
             List<Users> users = usersMapper.selectByExampleWithBLOBs(query);
             if (CollectionUtils.isEmpty(users)) {
-                resp.setStatus(1);
+                resp.setStatus("1");
                 resp.setMsg("用户不存在");
 
                 return resp;
@@ -247,7 +251,7 @@ public class UserService {
                     resp.setResult(addresses);
                 }
             } catch (Exception e) {
-                resp.setStatus(1);
+                resp.setStatus("1");
                 resp.setMsg(e.getMessage());
 
                 return resp;
@@ -260,7 +264,7 @@ public class UserService {
     public Resp<List<CartGoods>> listCart(String userId) {
         Resp<List<CartGoods>> resp = new Resp<>();
         if (StringUtils.isEmpty(userId)) {
-            resp.setStatus(1);
+            resp.setStatus("1");
             resp.setMsg("用户不存在");
 
             return resp;
@@ -271,7 +275,7 @@ public class UserService {
         List<UserCartOrderWithBLOBs> users = userCartOrderMapper.selectByExampleWithBLOBs(query);
 
         if (CollectionUtils.isEmpty(users)) {
-            resp.setStatus(1);
+            resp.setStatus("1");
             resp.setMsg("用户不存在");
 
             return resp;
@@ -285,7 +289,7 @@ public class UserService {
              resp.setCount(carts.size());
              resp.setResult(carts);
         } catch (Exception e) {
-            resp.setStatus(1);
+            resp.setStatus("1");
             resp.setMsg(e.getMessage());
 
             return resp;
@@ -298,7 +302,7 @@ public class UserService {
         Resp<Order> resp = new Resp<>();
 
         if (StringUtils.isEmpty(userId)) {
-            resp.setStatus(1);
+            resp.setStatus("1");
             resp.setMsg("未登录");
 
             return resp;
@@ -306,7 +310,7 @@ public class UserService {
 
         if (StringUtils.isEmpty(request.getAddressId())
             || StringUtils.isEmpty(request.getOrderTotal())) {
-            resp.setStatus(1);
+            resp.setStatus("1");
             resp.setMsg("缺少必须参数");
 
             return resp;
@@ -380,11 +384,11 @@ public class UserService {
             cartOrders.get(0).setCartlist("[]");
             cartOrders.get(0).setOrderlist(mapper.writeValueAsString(orders));
 
-            userCartOrderMapper.updateByPrimaryKey(cartOrders.get(0));
+            userCartOrderMapper.updateByPrimaryKeyWithBLOBs(cartOrders.get(0));
 
             resp.setResult(order);
         } catch (Exception e) {
-            resp.setStatus(1);
+            resp.setStatus("1");
             resp.setMsg(e.getMessage());
 
             return resp;
@@ -393,11 +397,11 @@ public class UserService {
         return resp;
     }
 
-    public Resp<List<Order>> listOrder(String userId) {
-        Resp<List<Order>> resp = new Resp<>();
+    public Resp<List<OrderGoods>> listOrder(String userId) {
+        Resp<List<OrderGoods>> resp = new Resp<>();
 
         if (StringUtils.isEmpty(userId)) {
-            resp.setStatus(1);
+            resp.setStatus("1");
             resp.setMsg("未登录");
 
             return resp;
@@ -414,10 +418,26 @@ public class UserService {
             List<Order> orders = mapper.readValue(cartOrders.get(0).getOrderlist(),
                 new TypeReference<List<Order>>() {});
 
-            resp.setResult(orders);
-            resp.setCount(orders.size());
+            List<OrderGoods> orderGoods = new ArrayList<>();
+            for (Order order : orders) {
+                OrderGoods orderGood = new OrderGoods();
+
+                orderGood.setAddressInfo(order.getAddressInfo());
+                orderGood.setCreateDate(sDateFormat.format(order.getCreateDate()));
+                orderGood.setOrderId(order.getOrderId());
+                orderGood.setOrderStatus(order.getOrderStatus());
+                orderGood.setOrderTotal(order.getOrderTotal());
+                List<CartGoods> cartGoods = mapper.readValue(order.getGoodsList(),
+                                            new TypeReference<List<CartGoods>>() {});
+                orderGood.setGoodsList(cartGoods);
+
+                orderGoods.add(orderGood);
+            }
+
+            resp.setResult(orderGoods);
+            resp.setCount(orderGoods.size());
         } catch (Exception e) {
-            resp.setStatus(1);
+            resp.setStatus("1");
             resp.setMsg(e.getMessage());
         }
 
@@ -428,14 +448,14 @@ public class UserService {
         Resp<String> resp = new Resp<>();
 
         if (StringUtils.isEmpty(userId)) {
-            resp.setStatus(1);
+            resp.setStatus("1");
             resp.setMsg("未登录");
 
             return resp;
         }
 
         if (StringUtils.isEmpty(request.getOrderId())) {
-            resp.setStatus(1);
+            resp.setStatus("1");
             resp.setMsg("缺少订单号");
 
             return resp;
@@ -461,11 +481,183 @@ public class UserService {
 
             cartOrders.get(0).setOrderlist(mapper.writeValueAsString(orders));
 
-            userCartOrderMapper.updateByPrimaryKey(cartOrders.get(0));
+            userCartOrderMapper.updateByPrimaryKeyWithBLOBs(cartOrders.get(0));
             resp.setResult("suc");
         } catch (Exception e) {
-            resp.setStatus(1);
+            resp.setStatus("1");
             resp.setMsg(e.getMessage());
+        }
+
+        return resp;
+    }
+
+    public Resp<String> delCart(String userId, DelCartRequest request) {
+        Resp<String> resp = new Resp<>();
+
+        if (StringUtils.isEmpty(userId)) {
+            resp.setStatus("1");
+            resp.setMsg("未登录");
+
+            return resp;
+        }
+
+        if (StringUtils.isEmpty(request.getProductId())) {
+            resp.setStatus("1");
+            resp.setMsg("缺少产品号");
+
+            return resp;
+        }
+
+        UserCartOrderExample select = new UserCartOrderExample();
+        select.createCriteria().andUseridEqualTo(userId);
+        List<UserCartOrderWithBLOBs> cartOrders =
+            userCartOrderMapper.selectByExampleWithBLOBs(select);
+
+        ObjectMapper mapper = new ObjectMapper();
+
+        try {
+            List<CartGoods> carts = mapper.readValue(cartOrders.get(0).getCartlist(),
+                new TypeReference<List<CartGoods>>() {});
+
+            for (CartGoods cart : carts) {
+                if (cart.getProductId().equals(request.getProductId())) {
+                    carts.remove(cart);
+                    break;
+                }
+            }
+
+            cartOrders.get(0).setCartlist(mapper.writeValueAsString(carts));
+
+            userCartOrderMapper.updateByPrimaryKeyWithBLOBs(cartOrders.get(0));
+            resp.setResult("suc");
+        } catch (Exception e) {
+            resp.setStatus("1");
+            resp.setMsg(e.getMessage());
+        }
+
+        return resp;
+    }
+
+    public Resp<String> editCart(String userId, EditCartRequest request) {
+        Resp<String> resp = new Resp<>();
+
+        if (StringUtils.isEmpty(userId)) {
+            resp.setStatus("1");
+            resp.setMsg("未登录");
+
+            return resp;
+        }
+
+        UserCartOrderExample select = new UserCartOrderExample();
+        select.createCriteria().andUseridEqualTo(userId);
+        List<UserCartOrderWithBLOBs> cartOrders =
+            userCartOrderMapper.selectByExampleWithBLOBs(select);
+
+        ObjectMapper mapper = new ObjectMapper();
+
+        try {
+            List<CartGoods> carts = mapper.readValue(cartOrders.get(0).getCartlist(),
+                new TypeReference<List<CartGoods>>() {});
+
+            for (CartGoods cart : carts) {
+                if (cart.getProductId().equals(request.getProductId())) {
+                    cart.setProductNum(request.getProductNum());
+                    cart.setChecked(request.getChecked());
+                }
+            }
+
+            cartOrders.get(0).setCartlist(mapper.writeValueAsString(carts));
+
+            userCartOrderMapper.updateByPrimaryKeyWithBLOBs(cartOrders.get(0));
+            resp.setResult("suc");
+        } catch (Exception e) {
+            resp.setStatus("1");
+            resp.setMsg(e.getMessage());
+        }
+
+        return resp;
+    }
+
+    public Resp<String> updateAddress(String userId, UpdateAddressRequest request) {
+        Resp<String>  resp = new Resp<>();
+
+        UsersExample query = new UsersExample();
+        query.createCriteria().andUseridEqualTo(userId);
+        List<Users> users = usersMapper.selectByExampleWithBLOBs(query);
+
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            List<Address> addresses = mapper.readValue(users.get(0).getAddresslist(),
+                new TypeReference<List<Address>>() {});
+
+            for (Address add : addresses) {
+                if (request.getIsDefault()) {
+                    if (add.getAddressId().equals(request.getAddressId())) {
+                        add.setIsDefault(true);
+                        add.setUserName(request.getUserName());
+                        add.setTel(request.getTel());
+                        add.setStreetName(request.getStreetName());
+                    } else {
+                        add.setIsDefault(false);
+                    }
+                }
+            }
+
+            users.get(0).setAddresslist(mapper.writeValueAsString(addresses));
+
+            usersMapper.updateByPrimaryKeyWithBLOBs(users.get(0));
+        } catch (Exception e) {
+            resp.setStatus("1");
+            resp.setMsg(e.getMessage());
+
+            return resp;
+        }
+
+        resp.setMsg("suc");
+        return resp;
+    }
+
+    public Resp<String> delAddress(String userId, DelAddressRequest request) {
+        Resp<String> resp = new Resp<>();
+
+        if (StringUtils.isEmpty(userId)) {
+            resp.setStatus("1");
+            resp.setMsg("未登录");
+
+            return resp;
+        }
+
+        if (StringUtils.isEmpty(request.getAddressId())) {
+            resp.setStatus("1");
+            resp.setMsg("缺少产品号");
+
+            return resp;
+        }
+
+        UsersExample query = new UsersExample();
+        query.createCriteria().andUseridEqualTo(userId);
+        List<Users> users = usersMapper.selectByExampleWithBLOBs(query);
+
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            List<Address> addresses = mapper.readValue(users.get(0).getAddresslist(),
+                new TypeReference<List<Address>>() {});
+
+            for (Address add : addresses) {
+                if (add.getAddressId().equals(request.getAddressId())) {
+                    addresses.remove(add);
+                    break;
+                }
+            }
+
+            users.get(0).setAddresslist(mapper.writeValueAsString(addresses));
+
+            usersMapper.updateByPrimaryKeyWithBLOBs(users.get(0));
+        } catch (Exception e) {
+            resp.setStatus("1");
+            resp.setMsg(e.getMessage());
+
+            return resp;
         }
 
         return resp;

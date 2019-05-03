@@ -53,7 +53,7 @@ public class BackendConfig {
     @Data
     @Component
     @ConfigurationProperties(prefix = "database.mybatis")
-    @ConditionalOnExpression("${database.mybatis.enable:false}")
+//    @ConditionalOnExpression("${database.mybatis.enable:false}")
     public static class MybatisProperties {
         /**
          * 分页组件配置信息
