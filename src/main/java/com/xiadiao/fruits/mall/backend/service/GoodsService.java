@@ -202,11 +202,11 @@ public class GoodsService {
                                          Long priceGt,
                                          Long priceLte) {
         if (priceGt == null) {
-            priceGt = 99999L;
+            priceGt = 0L;
         }
 
         if (priceLte == null) {
-            priceLte = 0L;
+            priceLte = 99999L;
         }
 
         if (page == null) {
@@ -217,17 +217,21 @@ public class GoodsService {
             pageSize = 20;
         }
 
-        if (priceGt < priceLte) {
+        if (priceGt > priceLte) {
             Long tmp = priceGt;
             priceGt = priceLte;
             priceLte = tmp;
         }
 
         GoodsExample query = new GoodsExample();
-        query.createCriteria().andSalepriceBetween(priceLte, priceGt);
+        query.createCriteria().andSalepriceBetween(priceGt, priceLte);
 
         if (!StringUtils.isEmpty(sort)) {
-            query.setOrderByClause("`salePrice` " + sort);
+            if ("-1".equals(sort)) {
+                query.setOrderByClause("`salePrice` desc");
+            } else {
+                query.setOrderByClause("`salePrice` asc");
+            }
         }
 
         Page<Goods> goodsList = PageHelper.startPage(page, pageSize);
